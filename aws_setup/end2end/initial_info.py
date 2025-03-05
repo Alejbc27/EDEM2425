@@ -1,3 +1,5 @@
+import pandas as pd
+
 # Info examples form Jacinto's father notebooks
 
 airplanes = [
@@ -174,3 +176,24 @@ passengers = [
                     "dateOfBirth": "1989-02-10",
                 }
             ]
+
+
+# Corregir la estructura del JSON: convertir tuplas a listas en passengerIds
+for flight in flights:
+    if "passengerIds" in flight:
+        flight["passengerIds"] = [[pid, status] for pid, status in flight["passengerIds"]]
+
+landed_flights = [
+    {
+        "flightId": flight["flightId"],
+        "plateNumber": flight["plateNumber"],
+        "arrivalTime": flight["arrivalTime"],
+        "origin": flight["origin"],
+        "destination": flight["destination"],
+    }
+    for flight in flights if "arrivalTime" in flight and flight["arrivalTime"]
+]
+
+landed_flights_df = pd.DataFrame(landed_flights)
+
+print(landed_flights_df)
